@@ -20,6 +20,10 @@ public class MainActivity extends AppCompatActivity {
     EditText inputET;
     Button btnSave;
     Button btnRetreive;
+    String directory;
+    boolean isdirectoryCreated;
+    boolean isWriteComplete;
+    String retrieveData;
 
     public static final String FILE_NAME="file";
     @Override
@@ -30,18 +34,27 @@ public class MainActivity extends AppCompatActivity {
         inputET=(EditText)findViewById(R.id.editText);
         btnSave=(Button)findViewById(R.id.btnSave);
         btnRetreive=(Button)findViewById(R.id.btnRetrieve);
+        final FileInputOutput fileInputOutput=new FileInputOutput();
+        directory=fileInputOutput.createDirectory();
+        if(isdirectoryCreated){
+            isdirectoryCreated=true;
+            Toast.makeText(getApplicationContext(),"Directory Created",Toast.LENGTH_LONG).show();
+        }else{
+            isdirectoryCreated=false;
+            Toast.makeText(getApplicationContext(),"Directory Not Created",Toast.LENGTH_LONG).show();
+        }
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String textToBeSave=inputET.getText().toString();
-                writeFIle(textToBeSave);
+                fileInputOutput.writeOnFile(textToBeSave,directory);
             }
         });
 
         btnRetreive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String outputText=readFile();
+                String outputText=fileInputOutput.ReadFromFile(directory);
                 outputTV.setText(outputText);
             }
         });
